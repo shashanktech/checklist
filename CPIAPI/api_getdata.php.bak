@@ -1,0 +1,58 @@
+<?php
+
+require_once('inc/config.php');
+
+$timestamp = $_REQUEST["timpstamp"];
+date_default_timezone_set("UTC"); 
+
+
+if ($db_found) 
+{
+					if(isset($timestamp))
+					{
+						$condition = "";
+						if($timestamp != '')
+						{
+							$condition =" where modified_date >= '".$timestamp."'";
+						}
+						
+						 //Data for Access table 
+						 $data =  mysql_query("select * from tbl_access ".$condition) or die(mysql_error()); 
+						 $rowsaccess = array();
+						 while($r = mysql_fetch_assoc($data))
+						 {
+								$rowsaccess[] = $r;
+						 }
+
+						 //Data for Access table 
+						 $data =  mysql_query("select * from tbl_employee ".$condition) or die(mysql_error()); 
+						 $rows_employee = array();
+						 while($r = mysql_fetch_assoc($data))
+						 {
+								$rows_employee[] = $r;
+						 }
+
+						 //Data for Access table 
+						 $data =  mysql_query("select * from tbl_employer ".$condition) or die(mysql_error()); 
+						 $rows_employer = array();
+						 while($r = mysql_fetch_assoc($data))
+						 {
+								$rows_employer[] = $r;
+						 }
+
+
+						 
+						 echo "{\"responce\": \"200\",\"timestemp\": \"".gmdate("Y:m:d  H:i:s")."\",
+						 \"dataaccess\":".json_encode($rowsaccess).",
+						 \"dataemployee\":".json_encode($rows_employee).",
+						 \"dataemployer\":".json_encode($rows_employer).}";
+					}
+}
+else
+{
+	echo "{\"responce\": \"201\",\"message\": \"some Error 8978987996\"}";
+}
+
+
+
+?>
